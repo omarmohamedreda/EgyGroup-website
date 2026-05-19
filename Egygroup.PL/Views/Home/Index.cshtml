@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Egygroup.BLL.DTOS.BrandDto>
+
+@{
+    ViewData["Title"] = "Home";
+    var lang = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+    bool isAr = lang == "ar";
+}
+
+<!-- Hero Section -->
+<section class="hero bg-dark text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold">@(isAr ? "مرحباً بكم في إيجي جروب" : "Welcome to Egygroup")</h1>
+        <p class="lead">@(isAr ? "نقدم أفضل المنتجات والعلامات التجارية" : "We provide the best products and brands")</p>
+        <a href="/products" class="btn btn-primary btn-lg mt-3">
+            @(isAr ? "تصفح المنتجات" : "Browse Products")
+        </a>
+    </div>
+</section>
+
+<!-- Brands Section -->
+<section class="brands py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">@(isAr ? "علاماتنا التجارية" : "Our Brands")</h2>
+        <div class="row g-4">
+            @foreach (var brand in Model)
+            {
+                <div class="col-md-4 col-sm-6">
+                    <a href="/products/brand/@brand.Id" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm text-center p-3">
+                            @if (!string.IsNullOrEmpty(brand.LogoUrl))
+                            {
+                                <img src="@brand.LogoUrl" alt="@brand.NameEn"
+                                     class="card-img-top mx-auto" style="max-height:100px; object-fit:contain;" />
+                            }
+                            <div class="card-body">
+                                <h5 class="card-title">@(isAr? brand.NameAr: brand.NameEn)</h5>
+                                <p class="card-text text-muted small">
+                                    @(isAr? brand.DescriptionAr: brand.DescriptionEn)
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</section>

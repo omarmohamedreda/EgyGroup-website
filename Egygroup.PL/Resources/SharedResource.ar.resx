@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+	</resheader>
+	<data name="HeroTitle" xml:space="preserve">
+    <value>مرحباً بكم في إيجي جروب</value>
+  </data>
+	<data name="HeroSubtitle" xml:space="preserve">
+    <value>نقدم أفضل المنتجات والعلامات التجارية</value>
+  </data>
+	<data name="HeroBtnText" xml:space="preserve">
+    <value>تصفح المنتجات</value>
+  </data>
+	<data name="NavHome" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+	<data name="NavProducts" xml:space="preserve">
+    <value>المنتجات</value>
+  </data>
+	<data name="NavAbout" xml:space="preserve">
+    <value>من نحن</value>
+  </data>
+	<data name="NavLogin" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+	<data name="NavLogout" xml:space="preserve">
+    <value>تسجيل الخروج</value>
+  </data>
+	<data name="NavRegister" xml:space="preserve">
+    <value>إنشاء حساب</value>
+  </data>
+	<data name="BrandsTitle" xml:space="preserve">
+    <value>علاماتنا التجارية</value>
+  </data>
+	<data name="AllProducts" xml:space="preserve">
+    <value>جميع المنتجات</value>
+  </data>
+	<data name="ProductDetails" xml:space="preserve">
+    <value>تفاصيل المنتج</value>
+  </data>
+	<data name="AboutTitle" xml:space="preserve">
+    <value>من نحن</value>
+  </data>
+	<data name="AboutText" xml:space="preserve">
+    <value>إيجي جروب شركة رائدة في تقديم أفضل المنتجات والعلامات التجارية.</value>
+  </data>
+	<data name="BackToBrand" xml:space="preserve">
+    <value>→ رجوع للعلامة التجارية</value>
+  </data>
+	<data name="Brand" xml:space="preserve">
+    <value>العلامة التجارية</value>
+  </data>
+	<data name="Details" xml:space="preserve">
+    <value>التفاصيل</value>
+  </data>
+	<data name="Active" xml:space="preserve">
+    <value>نشط</value>
+  </data>
+	<data name="Inactive" xml:space="preserve">
+    <value>غير نشط</value>
+  </data>
+</root>

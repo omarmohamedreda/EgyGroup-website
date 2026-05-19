@@ -1,0 +1,16 @@
+﻿@model Egygroup.PL.ViewModels.ProductViewModel
+@{
+    ViewData["Title"] = "Edit Product"; Layout = "_AdminLayout";
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="text-decoration-none text-muted">
+        <i class="bi bi-arrow-left me-1"></i>Back to Products
+    </a>
+    <h4 class="fw-bold mt-2">Edit Product</h4>
+</div>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <partial name="_ProductForm" model="Model" />
+</form>

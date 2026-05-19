@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms</value>
+	</resheader>
+	<data name="HeroTitle" xml:space="preserve">
+    <value>Welcome to Egygroup</value>
+  </data>
+	<data name="HeroSubtitle" xml:space="preserve">
+    <value>We provide the best products and brands</value>
+  </data>
+	<data name="HeroBtnText" xml:space="preserve">
+    <value>Browse Products</value>
+  </data>
+	<data name="NavHome" xml:space="preserve">
+    <value>Home</value>
+  </data>
+	<data name="NavProducts" xml:space="preserve">
+    <value>Products</value>
+  </data>
+	<data name="NavAbout" xml:space="preserve">
+    <value>About</value>
+  </data>
+	<data name="NavLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+	<data name="NavLogout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+	<data name="NavRegister" xml:space="preserve">
+    <value>Register</value>
+  </data>
+	<data name="BrandsTitle" xml:space="preserve">
+    <value>Our Brands</value>
+  </data>
+	<data name="AllProducts" xml:space="preserve">
+    <value>All Products</value>
+  </data>
+	<data name="ProductDetails" xml:space="preserve">
+    <value>Product Details</value>
+  </data>
+	<data name="AboutTitle" xml:space="preserve">
+    <value>About Us</value>
+  </data>
+	<data name="AboutText" xml:space="preserve">
+    <value>Egygroup is a leading company providing the best products and brands.</value>
+  </data>
+	<data name="BackToBrand" xml:space="preserve">
+    <value>← Back to Brand</value>
+  </data>
+	<data name="Brand" xml:space="preserve">
+    <value>Brand</value>
+  </data>
+	<data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+	<data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+	<data name="Inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+</root>

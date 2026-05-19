@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Egygroup.BLL.DTOS.ProductDto>
+
+@{
+    ViewData["Title"] = "Products";
+    bool isAr = System.Threading.Thread.CurrentThread.CurrentCulture.Name == "ar";
+}
+
+<div class="container py-5">
+    <h2 class="mb-4">
+        @if (ViewBag.BrandNameEn != null)
+        {
+            @(isAr? ViewBag.BrandNameAr: ViewBag.BrandNameEn)
+        }
+        else
+        {
+            @(isAr ? "جميع المنتجات" : "All Products")
+        }
+    </h2>
+
+    <div class="row g-4">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4 col-sm-6">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        <img src="@product.ImageUrl" class="card-img-top"
+                             style="height:200px; object-fit:cover;" alt="@product.NameEn" />
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@(isAr? product.NameAr: product.NameEn)</h5>
+                        <p class="card-text text-muted small">
+                            @(isAr? product.BrandNameAr: product.BrandNameEn)
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="/products/details/@product.Id" class="btn btn-outline-primary btn-sm w-100">
+                            @(isAr ? "التفاصيل" : "Details")
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

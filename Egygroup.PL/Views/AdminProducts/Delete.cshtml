@@ -1,0 +1,34 @@
+﻿@model Egygroup.BLL.DTOS.ProductDto
+@{
+    ViewData["Title"] = "Delete Product"; Layout = "_AdminLayout";
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="text-decoration-none text-muted">
+        <i class="bi bi-arrow-left me-1"></i>Back to Products
+    </a>
+    <h4 class="fw-bold mt-2 text-danger">Delete Product</h4>
+</div>
+
+<div class="card border-danger shadow-sm" style="max-width:500px">
+    <div class="card-body">
+        <p class="mb-1 text-muted">Are you sure you want to delete:</p>
+        <h5 class="fw-bold">@Model.NameEn <span class="text-muted">/ @Model.NameAr</span></h5>
+        <p class="text-muted small">Brand: @Model.BrandNameEn</p>
+
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" height="80" class="rounded my-2" />
+        }
+
+        <div class="d-flex gap-2 mt-3">
+            <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash me-1"></i>Yes, Delete
+                </button>
+            </form>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </div>
+</div>
