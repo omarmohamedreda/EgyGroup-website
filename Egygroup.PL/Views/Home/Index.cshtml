@@ -1,47 +1,1063 @@
-﻿@model IEnumerable<Egygroup.BLL.DTOS.BrandDto>
-
+﻿@model Egygroup.PL.ViewModels.HomeViewModel
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Egygroup.PL.Resources.SharedResource> _localizer
 @{
-    ViewData["Title"] = "Home";
-    var lang = System.Threading.Thread.CurrentThread.CurrentCulture.Name;
-    bool isAr = lang == "ar";
+    ViewData["Title"] = _localizer["HomeTitle"];
+    var isAr = System.Globalization.CultureInfo.CurrentCulture.Name == "ar";
+    var dir = isAr ? "rtl" : "ltr";
+    var textAlign = isAr ? "text-end" : "text-start";
+    var flexDir = isAr ? "flex-row-reverse" : "flex-row";
 }
 
-<!-- Hero Section -->
-<section class="hero bg-dark text-white text-center py-5">
-    <div class="container">
-        <h1 class="display-4 fw-bold">@(isAr ? "مرحباً بكم في إيجي جروب" : "Welcome to Egygroup")</h1>
-        <p class="lead">@(isAr ? "نقدم أفضل المنتجات والعلامات التجارية" : "We provide the best products and brands")</p>
-        <a href="/products" class="btn btn-primary btn-lg mt-3">
-            @(isAr ? "تصفح المنتجات" : "Browse Products")
-        </a>
-    </div>
-</section>
+@section Styles {
+    <style>
+        :root {
+            --blue-dark:  #0d47a1;
+            --blue-mid:   #1a6fbd;
+            --blue-light: #29b6f6;
+            --accent:     #00e5ff;
+            --white:      #ffffff;
+            --off-white:  #f0f6ff;
+            --gray-light: #e8f1fb;
+            --gray-text:  #5a7a99;
+            --dark:       #0a1628;
+            --card-shadow: 0 8px 32px rgba(13,71,161,0.10);
+        }
 
-<!-- Brands Section -->
-<section class="brands py-5">
-    <div class="container">
-        <h2 class="text-center mb-4">@(isAr ? "علاماتنا التجارية" : "Our Brands")</h2>
-        <div class="row g-4">
-            @foreach (var brand in Model)
-            {
-                <div class="col-md-4 col-sm-6">
-                    <a href="/products/brand/@brand.Id" class="text-decoration-none">
-                        <div class="card h-100 shadow-sm text-center p-3">
-                            @if (!string.IsNullOrEmpty(brand.LogoUrl))
-                            {
-                                <img src="@brand.LogoUrl" alt="@brand.NameEn"
-                                     class="card-img-top mx-auto" style="max-height:100px; object-fit:contain;" />
-                            }
-                            <div class="card-body">
-                                <h5 class="card-title">@(isAr? brand.NameAr: brand.NameEn)</h5>
-                                <p class="card-text text-muted small">
-                                    @(isAr? brand.DescriptionAr: brand.DescriptionEn)
-                                </p>
-                            </div>
-                        </div>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', 'Segoe UI', sans-serif;
+            background: var(--white);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--dark) 0%, #0d2a4f 50%, #0d47a1 100%);
+        }
+
+        .hero-bg-pattern {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(41,182,246,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0,229,255,0.10) 0%, transparent 40%),
+                radial-gradient(circle at 60% 80%, rgba(26,111,189,0.20) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .hero-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(41,182,246,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(41,182,246,0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+
+        .hero-hex {
+            position: absolute;
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 600px;
+            height: 600px;
+            opacity: 0.06;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,2 93,25 93,75 50,98 7,75 7,25' fill='%2329b6f6'/%3E%3C/svg%3E") center/contain no-repeat;
+            animation: slowSpin 30s linear infinite;
+        }
+
+        @@keyframes slowSpin {
+            from { transform: translateY(-50%) rotate(0deg); }
+            to   { transform: translateY(-50%) rotate(360deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 120px 0 80px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(41,182,246,0.15);
+            border: 1px solid rgba(41,182,246,0.3);
+            border-radius: 50px;
+            padding: 6px 16px;
+            color: var(--blue-light);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @@keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%       { opacity: 0.5; transform: scale(1.4); }
+        }
+
+        .hero-title {
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--white);
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title .gradient-text {
+            background: linear-gradient(90deg, var(--blue-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.65);
+            margin-bottom: 40px;
+            line-height: 1.7;
+            max-width: 520px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-hero-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+            color: var(--white);
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(26,111,189,0.4);
+        }
+
+        .btn-hero-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(26,111,189,0.6);
+            color: var(--white);
+        }
+
+        .btn-hero-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: transparent;
+            color: var(--white);
+            padding: 14px 32px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.3);
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-hero-outline:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.6);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 64px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hero-stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--white);
+            line-height: 1;
+        }
+
+        .hero-stat-num span {
+            color: var(--accent);
+        }
+
+        .hero-stat-label {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        /* ===== SECTION HEADERS ===== */
+        .section-header {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: var(--gray-light);
+            color: var(--blue-mid);
+            padding: 4px 14px;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            font-weight: 800;
+            color: var(--dark);
+            line-height: 1.2;
+            margin-bottom: 14px;
+        }
+
+        .section-title .accent { color: var(--blue-mid); }
+
+        .section-desc {
+            font-size: 1rem;
+            color: var(--gray-text);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .section-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--blue-mid), var(--blue-light));
+            border-radius: 2px;
+            margin: 16px auto 0;
+        }
+
+        /* ===== BRANDS ===== */
+        .brands-section {
+            padding: 96px 0;
+            background: var(--white);
+        }
+
+        .brands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .brand-card {
+            background: var(--white);
+            border: 1.5px solid var(--gray-light);
+            border-radius: 20px;
+            padding: 32px 24px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(26,111,189,0.04), rgba(41,182,246,0.04));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .brand-card:hover {
+            border-color: var(--blue-light);
+            box-shadow: var(--card-shadow);
+            transform: translateY(-6px);
+            color: var(--dark);
+        }
+
+        .brand-card:hover::before { opacity: 1; }
+
+        .brand-logo-wrap {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            background: var(--gray-light);
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .brand-card:hover .brand-logo-wrap {
+            background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+        }
+
+        .brand-logo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 8px;
+        }
+
+        .brand-logo-placeholder {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--blue-mid);
+            transition: color 0.3s ease;
+        }
+
+        .brand-card:hover .brand-logo-placeholder { color: var(--white); }
+
+        .brand-name {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .brand-products-count {
+            font-size: 0.82rem;
+            color: var(--gray-text);
+        }
+
+        .brand-arrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--blue-mid);
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-top: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .brand-card:hover .brand-arrow { opacity: 1; }
+
+        /* ===== PRODUCTS ===== */
+        .products-section {
+            padding: 96px 0;
+            background: var(--off-white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .products-section::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(41,182,246,0.06), transparent 70%);
+            pointer-events: none;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 28px;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 16px rgba(13,71,161,0.06);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            box-shadow: var(--card-shadow);
+            transform: translateY(-6px);
+            color: var(--dark);
+        }
+
+        .product-img-wrap {
+            position: relative;
+            aspect-ratio: 4/3;
+            background: var(--gray-light);
+            overflow: hidden;
+        }
+
+        .product-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-img-wrap img { transform: scale(1.07); }
+
+        .product-img-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(26,111,189,0.2);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 14px;
+            background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+            color: var(--white);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 50px;
+        }
+
+        .product-badge.badge-start { left: 14px; }
+        .product-badge.badge-end   { right: 14px; }
+
+        .product-body {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-brand-tag {
+            font-size: 0.75rem;
+            color: var(--blue-mid);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+        }
+
+        .product-name {
+            font-size: 1rem;
+            font-weight: 700;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .product-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--blue-mid);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 14px;
+            transition: gap 0.2s ease;
+        }
+
+        .product-card:hover .product-link { gap: 10px; }
+
+        .view-all-wrap {
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        .btn-view-all {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--white);
+            color: var(--blue-mid);
+            border: 2px solid var(--blue-mid);
+            padding: 13px 36px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view-all:hover {
+            background: var(--blue-mid);
+            color: var(--white);
+            box-shadow: 0 6px 24px rgba(26,111,189,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* ===== ABOUT SNIPPET ===== */
+        .about-section {
+            padding: 96px 0;
+            background: var(--white);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        @@media (max-width: 768px) {
+            .about-content { grid-template-columns: 1fr; gap: 40px; }
+            .hero-stats { flex-wrap: wrap; gap: 24px; }
+            .brands-grid { grid-template-columns: repeat(2, 1fr); }
+            .products-grid { grid-template-columns: 1fr; }
+        }
+
+        .about-visual {
+            position: relative;
+        }
+
+        .about-img-main {
+            width: 100%;
+            aspect-ratio: 4/3;
+            border-radius: 24px;
+            background: linear-gradient(135deg, var(--blue-dark), var(--blue-mid));
+            overflow: hidden;
+            position: relative;
+        }
+
+        .about-img-main img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+        }
+
+        .about-img-placeholder {
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .about-img-placeholder i { font-size: 4rem; }
+
+        .about-float-card {
+            position: absolute;
+            bottom: -20px;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 16px 24px;
+            box-shadow: 0 12px 40px rgba(13,71,161,0.15);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            min-width: 200px;
+        }
+
+        .about-float-card.card-left  { left: -20px; }
+        .about-float-card.card-right { right: -20px; }
+
+        .float-icon {
+            width: 44px; height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .float-num {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--dark);
+            line-height: 1;
+        }
+
+        .float-label {
+            font-size: 0.75rem;
+            color: var(--gray-text);
+            margin-top: 2px;
+        }
+
+        .about-text .section-header { text-align: start; }
+        .about-text .section-divider { margin: 16px 0 0; }
+
+        .about-features {
+            list-style: none;
+            margin: 32px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .about-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            color: #3a5a7a;
+        }
+
+        .feature-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+            flex-shrink: 0;
+        }
+
+        .btn-about {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--blue-mid), var(--blue-light));
+            color: var(--white);
+            padding: 13px 30px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(26,111,189,0.3);
+        }
+
+        .btn-about:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(26,111,189,0.5);
+            color: var(--white);
+        }
+
+        /* ===== FOOTER ===== */
+        .site-footer {
+            background: var(--dark);
+            color: rgba(255,255,255,0.7);
+            padding: 64px 0 32px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+
+        @@media (max-width: 768px) {
+            .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+            .about-content { grid-template-columns: 1fr; }
+        }
+
+        .footer-brand-logo {
+            height: 48px;
+            margin-bottom: 16px;
+            filter: brightness(0) invert(1);
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            max-width: 300px;
+            margin-bottom: 24px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .social-btn:hover {
+            background: var(--blue-mid);
+            border-color: var(--blue-mid);
+            color: var(--white);
+        }
+
+        .footer-col-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.55);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover { color: var(--blue-light); }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+
+        .footer-bottom a {
+            color: var(--blue-light);
+            text-decoration: none;
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+}
+
+<!-- ===== HERO ===== -->
+<section class="hero" dir="@dir">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-hex"></div>
+
+    <div class="container hero-content">
+        <div class="row">
+            <div class="col-lg-7">
+                <div class="hero-badge">
+                    @(isAr ? "المجموعة المصرية للتجارة والتصنيع" : "Egyptian Group for Trade & Manufacturing")
+                </div>
+
+                <h1 class="hero-title">
+                    @if (isAr)
+                    {
+                        <span>حلول </span>
+                        <span class="gradient-text">متكاملة</span>
+
+                        <br />
+                        <span>للتجارة والتصنيع</span>
+                    }
+                    else
+                    {
+                        <span>Integrated </span>
+                        <span class="gradient-text">Solutions</span>
+
+                        <br />
+                        <span>for Trade & Industry</span>
+                    }
+                </h1>
+
+                <p class="hero-subtitle">
+                    @(isAr
+                                        ? "نقدم أفضل المنتجات والحلول التجارية بجودة عالية ومعايير دولية، خدمة عملاء متميزة وشراكات استراتيجية موثوقة."
+                                        : "We deliver premium products and business solutions with international quality standards, exceptional customer service, and trusted strategic partnerships.")
+                </p>
+
+                <div class="hero-actions">
+                    <a href="@Url.Action("Index", "Products")" class="btn-hero-primary">
+                        <i class="bi bi-grid-3x3-gap-fill"></i>
+                        @(isAr ? "تصفح المنتجات" : "Browse Products")
+                    </a>
+                    <a href="@Url.Action("Index", "About")" class="btn-hero-outline">
+                        @(isAr ? "اعرف أكثر" : "Learn More")
+                        <i class="bi bi-arrow-@(isAr ? "left" : "right")"></i>
                     </a>
                 </div>
-            }
+
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-num">@Model.Brands.Count<span>+</span></div>
+                        <div class="hero-stat-label">@(isAr ? "براند" : "Brands")</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">@Model.FeaturedProducts.Count<span>+</span></div>
+                        <div class="hero-stat-label">@(isAr ? "منتج" : "Products")</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">30<span>+</span></div>
+                        <div class="hero-stat-label">@(isAr ? "سنة خبرة" : "Years Exp.")</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
+<!-- ===== BRANDS ===== -->
+@if (Model.Brands.Any())
+{
+    <section class="brands-section reveal" dir="@dir">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    @(isAr ? "العلامات " : "Top ") <span class="accent">@(isAr ? "التجارية" : "Brands")</span>
+                </h2>
+                <div class="section-divider"></div>
+                
+        </div>
+
+            <div class="brands-grid">
+            @foreach (var brand in Model.Brands)
+                {
+                    var brandName = isAr ? brand.NameAr : brand.NameEn;
+                    <a href="@Url.Action("ByBrand", "Products", new { id = brand.Id })" class="brand-card reveal">
+                        <div class="brand-logo-wrap">
+                            @if (!string.IsNullOrEmpty(brand.LogoUrl))
+                            {
+                                <img src="@brand.LogoUrl" alt="@brandName" />
+                            }
+                            else
+                            {
+                                <div class="brand-logo-placeholder">@brandName[0]</div>
+                            }
+                        </div>
+                        <div class="brand-name">@brandName</div>
+                        <div class="brand-products-count">
+                            @(isAr ? "عرض المنتجات" : "View Products")
+                        </div>
+                        <div class="brand-arrow">
+                            @(isAr ? "تصفح" : "Explore")
+                            <i class="bi bi-arrow-@(isAr ? "left" : "right")"></i>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<!-- ===== FEATURED PRODUCTS ===== -->
+@if (Model.FeaturedProducts.Any())
+{
+    <section class="products-section" dir="@dir">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag">@(isAr ? "منتجاتنا" : "Our Products")</span>
+                <h2 class="section-title">
+                    @(isAr ? "منتجات " : "") <span class="accent">@(isAr ? "مميزة" : "Featured Products")</span>
+                </h2>
+                <div class="section-divider"></div>
+                <p class="section-desc mt-3">
+                    @(isAr
+                                    ? "اكتشف أحدث منتجاتنا المختارة بعناية لتلبية احتياجاتك"
+                                    : "Discover our carefully selected products to meet your needs")
+            </p>
+        </div>
+
+            <div class="products-grid">
+            @foreach (var product in Model.FeaturedProducts)
+                {
+                    var productName = isAr ? product.NameAr : product.NameEn;
+                    var brandName = isAr ? product.BrandNameAr : product.BrandNameEn;
+                    <a href="@Url.Action("Details", "Products", new { id = product.Id })" class="product-card reveal">
+                        <div class="product-img-wrap">
+                            @if (!string.IsNullOrEmpty(product.ImageUrl))
+                            {
+                                <img src="@product.ImageUrl" alt="@productName" loading="lazy" />
+                            }
+                            else
+                            {
+                                <div class="product-img-placeholder">
+                                    <i class="bi bi-box-seam"></i>
+                                </div>
+                            }
+                            @if (!string.IsNullOrEmpty(brandName))
+                            {
+                                <span class="product-badge @(isAr ? "badge-end" : "badge-start")">@brandName</span>
+                            }
+                        </div>
+                        <div class="product-body">
+                            @if (!string.IsNullOrEmpty(brandName))
+                            {
+                                <div class="product-brand-tag">@brandName</div>
+                            }
+                            <div class="product-name">@productName</div>
+                            <div class="product-link">
+                                @(isAr ? "عرض التفاصيل" : "View Details")
+                                <i class="bi bi-arrow-@(isAr ? "left" : "right")"></i>
+                            </div>
+                        </div>
+                    </a>
+                }
+            </div>
+
+            <div class="view-all-wrap reveal">
+                <a href="@Url.Action("Index", "Products")" class="btn-view-all">
+                    @(isAr ? "عرض كل المنتجات" : "View All Products")
+                    <i class="bi bi-arrow-@(isAr ? "left" : "right")"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+}
+
+<!-- ===== ABOUT SNIPPET ===== -->
+<section class="about-section reveal" dir="@dir">
+    <div class="container">
+        <div class="about-content">
+            <!-- Visual side -->
+            <div class="about-visual">
+                <div class="about-img-main">
+                    <div class="about-img-placeholder">
+                        <i class="bi bi-building"></i>
+                        <span style="font-size:1rem; font-weight:600;">egy group</span>
+                    </div>
+                </div>
+                <div class="about-float-card @(isAr ? "card-right" : "card-left")">
+                    <div class="float-icon"><i class="bi bi-award-fill"></i></div>
+                    <div>
+                        <div class="float-num">30+</div>
+                        <div class="float-label">@(isAr ? "سنوات خبرة" : "Years of Experience")</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Text side -->
+            <div class="about-text">
+                <div class="section-header @(isAr ? "text-end" : "text-start")">
+                    <span class="section-tag">@(isAr ? "من نحن" : "About Us")</span>
+                    <h2 class="section-title">
+                        @(isAr ? "المجموعة " : "Egy ") <span class="accent">@(isAr ? "المصرية" : "Group")</span>
+                    </h2>
+                    <div class="section-divider @(isAr ? "me-auto" : "ms-0")"></div>
+                </div>
+
+                <p style="color: var(--gray-text); line-height:1.8; margin-top: 16px;">
+                    @(isAr
+                                        ? "المجموعة المصرية للتجارة والتصنيع — شركة رائدة تقدم حلولاً متكاملة للتجارة والصناعة بمعايير جودة عالية ومنتجات متنوعة تلبي احتياجات السوق المصري والإقليمي."
+                                        : "Egy Group is a leading company offering integrated trade and manufacturing solutions with high quality standards and diverse products serving the Egyptian and regional markets.")
+                </p>
+
+                <ul class="about-features">
+                    <li>
+                        <span class="feature-dot"></span>
+                        @(isAr ? "منتجات عالية الجودة بمعايير دولية" : "High-quality products with international standards")
+                    </li>
+                    <li>
+                        <span class="feature-dot"></span>
+                        @(isAr ? "شراكات استراتيجية مع أبرز البراندات" : "Strategic partnerships with top brands")
+                    </li>
+                    <li>
+                        <span class="feature-dot"></span>
+                        @(isAr ? "فريق متخصص وخبرة أكثر من 30 سنوات" : "Expert team with 10+ years of experience")
+                    </li>
+                    <li>
+                        <span class="feature-dot"></span>
+                        @(isAr ? "خدمة عملاء متميزة على مدار الساعة" : "Outstanding customer service around the clock")
+                    </li>
+                </ul>
+
+                <a href="@Url.Action("Index", "About")" class="btn-about">
+                    @(isAr ? "اعرف أكثر عنا" : "Learn More About Us")
+                    <i class="bi bi-arrow-@(isAr ? "left" : "right")"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer" dir="@dir">
+    <div class="container">
+        <div class="footer-grid">
+            <!-- Brand col -->
+            <div>
+                <img src="~/images/Logo.png" alt="egy group" class="footer-brand-logo" />
+                <p class="footer-desc">
+                    @(isAr
+                                        ? "المجموعة المصرية للتجارة والتصنيع — نقدم أفضل الحلول التجارية والصناعية بجودة لا مثيل لها."
+                                        : "Egyptian Group for Trade & Manufacturing — delivering the best commercial and industrial solutions with unmatched quality.")
+                </p>
+                <div class="footer-social">
+                    <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="social-btn"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="social-btn"><i class="bi bi-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <div class="footer-col-title">@(isAr ? "روابط سريعة" : "Quick Links")</div>
+                <ul class="footer-links">
+                    <li><a href="@Url.Action("Index", "Home")">@(isAr ? "الرئيسية" : "Home")</a></li>
+                    <li><a href="@Url.Action("Index", "Products")">@(isAr ? "المنتجات" : "Products")</a></li>
+                    <li><a href="@Url.Action("Index", "About")">@(isAr ? "عن الشركة" : "About Us")</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div>
+                <div class="footer-col-title">@(isAr ? "تواصل معنا" : "Contact Us")</div>
+                <ul class="footer-links">
+                    <li><a href="mailto:egyption.group.eg@gmail.com">egyption.group.eg@gmail.com</a></li>
+                    <li><a href="tel:+201018676767">201018676767+</a></li>
+                    <li><a href="#">@(isAr ? "القاهرة، مصر" : "Cairo, Egypt")</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© @DateTime.Now.Year egy group. @(isAr ? "جميع الحقوق محفوظة" : "All Rights Reserved")</span>
+            
+        </div>
+    </div>
+</footer>
+
+@section Scripts {
+    <script>
+        // Scroll reveal
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+}

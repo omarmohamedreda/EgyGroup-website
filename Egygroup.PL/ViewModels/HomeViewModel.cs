@@ -4,7 +4,7 @@ namespace Egygroup.PL.ViewModels
 {
     public class HomeViewModel
     {
-        public IEnumerable<BrandDto> Brands { get; set; } = new List<BrandDto>();
-        public IEnumerable<ProductDto> FeaturedProducts { get; set; } = new List<ProductDto>();
+        public List<BrandDto> Brands { get; set; } = new();
+        public List<ProductDto> FeaturedProducts { get; set; } = new();
     }
 }
