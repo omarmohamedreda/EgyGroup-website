@@ -778,7 +778,7 @@
                         <span class="gradient-text">متكاملة</span>
 
                         <br />
-                        <span>للتجارة والتصنيع</span>
+                        <span>للصناعات البلاستيكية</span>
                     }
                     else
                     {
@@ -786,7 +786,7 @@
                         <span class="gradient-text">Solutions</span>
 
                         <br />
-                        <span>for Trade & Industry</span>
+                        <span>for Plastic Industries</span>
                     }
                 </h1>
 
@@ -825,6 +825,7 @@
         </div>
     </div>
 </section>
+
 
 <!-- ===== BRANDS ===== -->
 @if (Model.Brands.Any())
@@ -868,6 +869,8 @@
         </div>
     </section>
 }
+
+
 
 <!-- ===== FEATURED PRODUCTS ===== -->
 @if (Model.FeaturedProducts.Any())
@@ -934,6 +937,8 @@
     </section>
 }
 
+
+
 <!-- ===== ABOUT SNIPPET ===== -->
 <section class="about-section reveal" dir="@dir">
     <div class="container">
@@ -999,13 +1004,15 @@
     </div>
 </section>
 
+
+
 <!-- ===== FOOTER ===== -->
 <footer class="site-footer" dir="@dir">
     <div class="container">
         <div class="footer-grid">
             <!-- Brand col -->
             <div>
-                <img src="~/images/Logo.png" alt="egy group" class="footer-brand-logo" />
+                <img src="~/images/EgyLogo.png" alt="egy group" class="footer-brand-logo" />
                 <p class="footer-desc">
                     @(isAr
                                         ? "المجموعة المصرية للتجارة والتصنيع — نقدم أفضل الحلول التجارية والصناعية بجودة لا مثيل لها."
@@ -1046,6 +1053,7 @@
         </div>
     </div>
 </footer>
+
 
 @section Scripts {
     <script>
